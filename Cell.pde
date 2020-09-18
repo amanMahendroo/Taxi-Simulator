@@ -16,4 +16,8 @@ class Cell {
     stroke(255, 10);
     rect(pos.x, pos.y, width / gSize, height / gSize);
   }
+  
+  PVector givePos() {
+    return new PVector(pos.x, pos.y);
+  }
 }
