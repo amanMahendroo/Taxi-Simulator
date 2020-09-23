@@ -46,18 +46,31 @@ class Path {
     
     while (!cellComp(cur.i, cur.j, start[0], start[1])) {
       t_path[count] = new Cell(cur.i, cur.j, 1);
-      minNode temp = new minNode(cur.i-1, cur.j, 0);
-      if (land.grid[cur.i+1][cur.j].score < land.grid[temp.i][temp.j].score) {
-        temp.i = cur.i+1;
-        temp.j = cur.j;
+      minNode temp = new minNode(cur.i, cur.j, 0);
+      int a = cur.i, b = cur.j;
+      if (a + 1 < gSize && a + 1 >= 0 && b < gSize && b >= 0) {
+        if (land.grid[a+1][b].score < land.grid[temp.i][temp.j].score) {
+          temp.i = a+1;
+          temp.j = b;
+        }
       }
-      if (land.grid[cur.i][cur.j-1].score < land.grid[temp.i][temp.j].score) {
-        temp.i = cur.i;
-        temp.j = cur.j-1;
+      if (a - 1 < gSize && a - 1 >= 0 && b < gSize && b >= 0) {
+        if (land.grid[a-1][b].score < land.grid[temp.i][temp.j].score) {
+          temp.i = a-1;
+          temp.j = b;
+        }
       }
-      if (land.grid[cur.i][cur.j+1].score < land.grid[temp.i][temp.j].score) {
-        temp.i = cur.i;
-        temp.j = cur.j+1;
+      if (a < gSize && a >= 0 && b + 1 < gSize && b + 1 >= 0) {
+        if (land.grid[a][b+1].score < land.grid[temp.i][temp.j].score) {
+          temp.i = a;
+          temp.j = b+1;
+        }
+      }
+      if (a < gSize && a >= 0 && b - 1 < gSize && b - 1 >= 0) {
+        if (land.grid[a][b-1].score < land.grid[temp.i][temp.j].score) {
+          temp.i = a;
+          temp.j = b-1;
+        }
       }
       ++count;
       cur = temp;
