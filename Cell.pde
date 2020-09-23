@@ -1,16 +1,18 @@
 class Cell {
-  boolean state = false;
+  boolean road = false;
+  boolean checked = false;
+  int score;
   PVector pos;
   Cell(int x, int y, int s) {
     pos = new PVector(x, y);
     if (s == 1) {
-      state = true;
+      road = true;
     }
   }
   
   void show() {
     fill(102);
-    if (state) {
+    if (road) {
       fill(51);
     }
     stroke(255, 10);
@@ -18,6 +20,6 @@ class Cell {
   }
   
   PVector givePos() {
-    return new PVector(pos.x, pos.y);
+    return pos;
   }
 }
