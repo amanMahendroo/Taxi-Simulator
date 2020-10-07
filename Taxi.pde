@@ -12,8 +12,8 @@ class Taxi {
   Taxi()
   {
     path = new PVector[41];
-    pos = new PVector(40.0,20.0);
-    prev_pos = pos;
+    pos = new PVector(20.0,20.0);
+    prev_pos = new PVector();
     cur_angle = HALF_PI;
     c = new PVector(1.0, 0.0);
     n = new PVector(0.0, 0.0);
@@ -25,15 +25,25 @@ class Taxi {
   
   void addPath(Cell[] new_path)
   {
-    path = new PVector[new_path.length-1];
-    for( int i=1; i<new_path.length; i++ )
+    int len;
+    for(len=0; new_path[len]!=null; len++);
+    
+    path = new PVector[len-1];
+    for(int i=1; i<len; i++)
     {
-      path[i-1] = subtract( new_path[i].givePos(), new_path[i-1].givePos());
+      path[i-1] = new PVector();
+      path[i-1].x = new_path[i].givePos().x - new_path[i-1].givePos().x;
+      path[i-1].y = new_path[i].givePos().y - new_path[i-1].givePos().y;
     }
-    if( PVector.dist( n, new PVector(0,0) )==0 )
-    {
-      n = path[0];
-    }
+    n = (path.length!=0)? path[0] : n;
+    c.x = new_path[0].givePos().x - int(pos.x/40);
+    c.y = new_path[0].givePos().y - int(pos.y/40);
+    pos.x = pos.x + c.x*20;
+    pos.y = pos.y + c.y*20;
+    cur_angle = PVector.angleBetween(c,new PVector(1.0,0));
+    cur_angle = (cur_angle==HALF_PI)? cur_angle*c.y + HALF_PI : cur_angle + HALF_PI;
+    prev_pos = pos.copy();
+    loop();
   }
   
   void run()
@@ -60,8 +70,14 @@ class Taxi {
   void calculateMove()
   {
     int i = it;
-          
-    if( PVector.dist(c, n)==0 )
+    
+    if(n.x==0 && n.y==0)
+    {
+      it--;
+      display(0);
+      return;
+    }
+    else if( PVector.dist(c, n)==0 )
     {
       i = 0;
       pos.x += 2*c.x;
@@ -72,45 +88,36 @@ class Taxi {
       pos.x = prev_pos.x + c.x*20.0*sin(it*PI/40) + n.x*20.0*(1.0 - cos(it*PI/40));
       pos.y = prev_pos.y + c.y*20.0*sin(it*PI/40) + n.y*20.0*(1.0 - cos(it*PI/40));
     }
-    grid.show();
+    
+    land.show();
     
     if( c.x*n.y==-1 | c.y*n.x==1)
     {
       i*=-1;
     }
-    
     display(i);
-    
-    delay(15);
   }
   
   void moveNext()
   {
     it = 0;
-    prev_pos = pos.copy();
-    
     c = n;
     cur_angle = PVector.angleBetween(c,new PVector(1.0,0));
-    if(cur_angle == HALF_PI)
-    {
-      cur_angle *= c.y;
-    }
-    cur_angle += HALF_PI;
-    
-    
+    cur_angle = (cur_angle==HALF_PI)? cur_angle*c.y + HALF_PI : cur_angle + HALF_PI;
+    display(0);
     if( path_it<(path.length-1) )
     {
       path_it++;
       n = path[path_it];
+      prev_pos = pos.copy();
     }
     else
     {
-      noLoop();
+      pos.x = pos.x + n.x*20;
+      pos.y = pos.y + n.y*20;
+      n.x = 0.0;
+      n.y = 0.0;
+      path_it = 0;
     }
   }
 };
-
-PVector subtract(PVector a, PVector b)
-{
-  return new PVector( (a.x-b.x)/40.0, (a.y-b.y)/40.0);
-}
