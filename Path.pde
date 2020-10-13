@@ -32,6 +32,7 @@ class Path {
     for (int i = 0; i < land.grid.length; ++i) {
       for (int j = 0; j < land.grid.length; ++j) {
         land.grid[i][j].score = 1000;
+        land.grid[i][j].checked = false;
       }
     }
     step = 0;
