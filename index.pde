@@ -3,12 +3,35 @@ void setup() {
   land = new Grid();
   path = new Path();
   taxi = new Taxi();
+  passengers = new Passenger[10];
+}
+
+Passenger passengers[];
+int L = 0;
+
+class Passenger {
+  int x1, y1, x2, y2;
+  Passenger() {
+    do {
+      x1 = floor(random(20));
+      y1 = floor(random(20));
+      x2 = floor(random(20));
+      y2 = floor(random(20));
+    } while (!land.grid[x1][y1].road || !land.grid[x2][y2].road);
+  }
+  
+  void show() {
+    noFill();
+    stroke(255, 255, 0);
+    rect(x1 * 40, y1 * 40, 40, 40);
+    stroke(0, 255, 0);
+    rect(x2 * 40, y2 * 40, 40, 40);
+  }
 }
 
 Taxi taxi;
 Path path;
 Grid land;
-Cell[] testPath = new Cell[400];
 
 int gSize = 20; 
 boolean cur = true;
@@ -20,28 +43,26 @@ void draw() {
   land.show();
   taxi.run();
   
-  for (int i = 0; i < testPath.length; ++i) {
-    if(testPath[i] == null) {
+  if (L < 10 && random(300) < 1) {
+    passengers[L] = new Passenger();
+    ++L;
+    sortPassengers();
+  }
+  
+  for (int i = 0; i < passengers.length; ++i) {
+    if (passengers[i] == null) {
       break;
     }
-    fill(0, 255, 0);
-    circle(40 * testPath[i].pos.x + 20, 40 * testPath[i].pos.y + 20, 5);
+    passengers[i].show();
   }
 }
 
-void mousePressed() {
-  if (x2 == 0) {
-    if (x1 == 0) {
-      x1 = mouseX;
-      y1 = mouseY;
-      return;
-    }
-    x2 = mouseX;
-    y2 = mouseY;
-    return;
+void pick() {
+  for (int i = 1; i < passengers.length; ++i) {
+    passengers[i-1] = passengers[i];
   }
-  testPath = path.getPath(x1, y1, x2, y2);
-  taxi.addPath(testPath);
-  x1 = 0;
-  x2 = 0;
+}
+
+void sortPassengers() {
+  // Write sorting code here...
 }
