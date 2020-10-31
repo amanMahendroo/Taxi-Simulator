@@ -89,10 +89,10 @@ class Path {
   Cell[] getPath(float x1, float y1, float x2, float y2) {
     resetScores();
     
-    start[0] = int(x1/40);
-    start[1] = int(y1/40);
-    end[0] = int(x2/40);
-    end[1] = int(y2/40);
+    start[0] = floor(x1/40);
+    start[1] = floor(y1/40);
+    end[0] = floor(x2/40);
+    end[1] = floor(y2/40);
     
     checking[0] = new minNode(start[0], start[1], step);
     land.grid[0][0].score = step;    

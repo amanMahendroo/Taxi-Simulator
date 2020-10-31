@@ -9,6 +9,7 @@ void setup() {  // sets up canvas, initialises objects
 
 class Passenger {
   int x1, x2, y1, y2;
+
   Passenger() {
     do {
       x1 = floor(random(20));
@@ -38,6 +39,9 @@ int p_state = 0;  // stage the taxi is in: 0 if there is passenger is dropped or
 int x = 1;  // if a path has reached its end, x is equalled to 1
 int delay = 0;  // controlling delay when passenger is being picked/dropped
 int gSize = 20;  // size of grid
+
+
+int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
 
 void draw() {
   if(x==1 && ( p_state!=0 || L!=0 ))  // to calculate next path whenever a path has ended
@@ -93,7 +97,6 @@ void draw() {
     }
     passengers[i].show();
   }
-  
   if(p_state!=0) // if passengers exist, show the current passenger (blue circle)
   {
     cur_pas.show();

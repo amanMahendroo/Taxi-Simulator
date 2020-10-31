@@ -89,12 +89,10 @@ class Taxi {
       pos.x = prev_pos.x + c.x*20.0*sin(it*PI/40) + n.x*20.0*(1.0 - cos(it*PI/40));
       pos.y = prev_pos.y + c.y*20.0*sin(it*PI/40) + n.y*20.0*(1.0 - cos(it*PI/40));
     }
-    
     if( c.x*n.y==-1 | c.y*n.x==1)
     {
       i*=-1;
     }
-    
     display(i); // called in every frame
   }
   
